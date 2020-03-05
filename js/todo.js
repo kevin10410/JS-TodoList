@@ -69,6 +69,14 @@ function addListenerToTask() {
 
 }
 
+function idGenerator() {
+  return taskListAry.length === 0
+    ? 0
+    : taskListAry
+        .map(task => task)
+        .pop().id + 1;
+}
+
 function addTask(e) {
   // console.log('add');
   let inputTask = document.querySelector('.input-task input').value;
