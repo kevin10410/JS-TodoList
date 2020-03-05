@@ -281,21 +281,26 @@ function taskIconGenerator(taskObj) {
     : undoneIcon;
 };
 
+function taskContentGenerator(taskObj) {
+  return `<div data-testid="task-content"
+            class="task-content ${ taskObj.done ? 'line-through' : '' }">
+            <p>${ taskObj.task }</p>
+            <input data-testid="editTask" type="text" class="editTask" style="display: none;">
+          </div>`;
+};
+
 // 任務列表畫面
 function renderTaskList(tasksAry) {
   const taskListView = document.querySelector('.task-list');
   taskListView.innerHTML = tasksAry.map((obj, index) => {
 
-    const task = `<div data-testid="task-content" class="task-content ${ obj.done ? 'line-through' : '' }">
-      <p>${ obj.task }</p>
-      <input data-testid="editTask" type="text" class="editTask" style="display: none;">
-    </div>`
+    
       
       
     let dom = `
       <div class="task" id="${ obj.id }" data-num="${ index }">
         ${ taskIconGenerator(obj) }
-        ${ task }
+        ${ taskContentGenerator(obj) }
         ${ deleteIcon }
       </div>
     `;
