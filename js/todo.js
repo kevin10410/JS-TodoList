@@ -3,8 +3,6 @@
 // id: 資料的唯一性，目前用於判斷狀態切換時，同步更新當前狀態陣列、更新原陣列
 
 const taskListAry =  JSON.parse(localStorage.getItem('saveTaskList')) || [];
-let inProgressAry = [];
-let finishedAry = [];
 let taskObj = {};
 let currentStatus = '全部';
 
@@ -82,7 +80,7 @@ function addTask(e) {
   let inputTask = document.querySelector('.input-task input').value;
   if(inputTask === '') return;
   taskObj = {
-    id: String(taskListAry.length),
+    id: idGenerator(),
     done: false,
     task: inputTask,
   };
@@ -93,9 +91,9 @@ function addTask(e) {
 }
 
 function deleteTask(e) {
-  let id = e.currentTarget.parentNode.getAttribute('id');
+  let id = e.currentTarget.parentNode.getAttribute('id')
   taskListAry.forEach((task, index) => {
-    if (task.id === id) {
+    if (task.id === parseInt(id)) {
       taskListAry.splice(index, 1);
     }
   });
@@ -125,72 +123,23 @@ function deleteAllTasks(e) {
 }
 
 function completeTask(e) {
-  renderTaskList();
-  // console.log(e.currentTarget.parentNode);
-  let undone = e.currentTarget;
-  let done = e.currentTarget.parentNode.children[1];
-  let taskId = e.currentTarget.parentNode.getAttribute('data-num');
   let id = e.currentTarget.parentNode.getAttribute('id');
-  let currentTaskContent = e.currentTarget.parentNode.children[2];
-
-  if(currentStatus === '全部') {
-    taskListAry[taskId].done = true; 
-  }
-  if(currentStatus === '進行中') {
-    // 取得原陣列與目前點擊比對相符的物件，更新原陣列的狀態。
-    taskListAry.forEach(task => {
-      if(task.id === id) {
-        task.done = true;
-      }
-    })
-    inProgressAry[taskId].done = true;
-  }
-  if(currentStatus === '已完成') {
-    taskListAry.forEach(task => {
-      if(task.id === id) {
-        task.done = true;
-      }
-    })
-    finishedAry[taskId].done = true;
-  }
-  undone.style.display = 'none';
-  done.style.display = 'block';
-  currentTaskContent.classList.add('line-through');
+  taskListAry.forEach(task => {
+    if(task.id === parseInt(id)) {
+      task.done = true;
+    }
+  })
   localStorage.setItem('saveTaskList',JSON.stringify(taskListAry));
   renderTaskList();
 }
 
 function cancelCompletedTask(e) {
-  renderTaskList();
-  let done = e.currentTarget;
-  let undone = e.currentTarget.parentNode.children[0];
-  let taskId = e.currentTarget.parentNode.getAttribute('data-num');
-  let currentTaskContent = e.currentTarget.parentNode.children[2];
   let id = e.currentTarget.parentNode.getAttribute('id');
-  // 更新資料狀態
-  if(currentStatus === '全部') {
-    taskListAry[taskId].done = false; 
-  }
-  if(currentStatus === '進行中') {
-    // 在進行中時切換任務狀態，同時更新原陣列、當前陣列中物件的狀態
-    taskListAry.forEach(task => {
-      if(task.id === id) {
-        task.done = false;
-      }
-    })
-    inProgressAry[taskId].done = false;
-  }
-  if(currentStatus === '已完成') {
-    taskListAry.forEach(task => {
-      if(task.id === id) {
-        task.done = false;
-      }
-    })
-    finishedAry[taskId].done = false;
-  }
-  undone.style.display = 'block';
-  done.style.display = 'none';
-  currentTaskContent.classList.remove('line-through');
+  taskListAry.forEach(task => {
+    if(task.id === parseInt(id)) {
+      task.done = false;
+    }
+  });
   localStorage.setItem('saveTaskList',JSON.stringify(taskListAry));
   renderTaskList();
 }
@@ -213,29 +162,12 @@ function updateTaskContent(e) {
     const input = e.currentTarget;
     let newValue = e.currentTarget.value;
     previousElement.textContent = newValue;
-    const taskId = e.currentTarget.parentNode.parentNode.getAttribute('data-num');
     let id = e.currentTarget.parentNode.parentNode.getAttribute('id');
-    // 更新資料狀態
-    if(currentStatus === '全部') {
-      taskListAry[taskId].task = newValue; 
-    }
-    if(currentStatus === '進行中') {
-      // 在進行中時切換任務狀態，同時更新原陣列、當前陣列中物件的狀態
-      taskListAry.forEach(task => {
-        if(task.id === id) {
-          task.task = newValue;
-        }
-      })
-      inProgressAry[taskId].task = newValue;
-    }
-    if(currentStatus === '已完成') {
-      taskListAry.forEach(task => {
-        if(task.id === id) {
-          task.task = newValue;
-        }
-      })
-      finishedAry[taskId].task = newValue;
-    }
+    taskListAry.forEach(task => {
+      if(task.id === parseInt(id)) {
+        task.task = newValue;
+      }
+    })
     previousElement.style.display = "block";
     input.style.display = "none";
   }
