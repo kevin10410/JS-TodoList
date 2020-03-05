@@ -278,7 +278,7 @@ function taskContentGenerator(taskObj) {
           </div>`;
 };
 
-function taskElementGenerator(taskObj) {
+function taskElementGenerator(taskObj, index) {
   return  `<div class="task" id="${ taskObj.id }" data-num="${ index }">
             ${ taskIconGenerator(taskObj) }
             ${ taskContentGenerator(taskObj) }
