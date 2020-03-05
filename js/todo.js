@@ -10,13 +10,13 @@ let currentStatus = '全部';
 
 // setTimeout(() => {
 //   console.log(123);
-//   taskList(taskListAry);
+//   renderTaskList(taskListAry);
 // }, 0)
 
 // DOMContentLoaded 也可以
 
 // window.onload = () => {
-  taskList(taskListAry);
+  renderTaskList(taskListAry);
 // }
 addListenerToTask();
 
@@ -111,7 +111,7 @@ function deleteAllTasks(e) {
 
     alert('成功刪除所有待辦事項');
     taskListAry.splice(0);
-    taskList(taskListAry);
+    renderTaskList(taskListAry);
     localStorage.setItem('saveTaskList',JSON.stringify(taskListAry));
   }
   else {
@@ -248,15 +248,15 @@ function changeStatus(e) {
 function filterTasks(currentStatus) { 
   // console.log(currentStatus);
   if(currentStatus === '全部') {
-    taskList(taskListAry);
+    renderTaskList(taskListAry);
   }
   if(currentStatus === '進行中') {
     inProgressAry = taskListAry.filter(task => task.done === false);
-    taskList(inProgressAry);
+    renderTaskList(inProgressAry);
   }
   if(currentStatus === '已完成') {
     finishedAry = taskListAry.filter(task => task.done === true);
-    taskList(finishedAry);
+    renderTaskList(finishedAry);
   }
   addListenerToTask();
 }
@@ -264,7 +264,7 @@ function filterTasks(currentStatus) {
 
 
 // 任務列表畫面
-function taskList(tasksAry) {
+function renderTaskList(tasksAry) {
   const taskListView = document.querySelector('.task-list');
   taskListView.innerHTML = tasksAry.map((obj, index) => {
     // 透過模板字串搭配三元運算子動態修改css display / class 的值
