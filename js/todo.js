@@ -17,6 +17,7 @@ const deleteIcon = `<div data-testid="delete-icon" class="delete-icon">
 
 initChangeStatusEvent();
 initAddTaskEvents();
+initDeleteAllTaskEvent();
 renderTaskList();
 
 function initAddTaskEvents() {
@@ -41,6 +42,10 @@ function keyupToAddTask(e) {
 
 function initChangeStatusEvent() {
   document.querySelector('.task-status').addEventListener('click', changeStatus);
+};
+
+function initDeleteAllTaskEvent() {
+  document.querySelector('.refresh').addEventListener('click', deleteAllTasks);
 };
 
 // 每次重新建立 DOM 物件時替 DOM 元素掛上監聽事件
@@ -90,7 +95,6 @@ function deleteTask(e) {
   renderTaskList();
 }
 
-document.querySelector('.refresh').addEventListener('click', deleteAllTasks);
 function deleteAllTasks(e) {
   // console.log('refresh');
   if(taskListAry.length === 0) {
