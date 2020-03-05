@@ -15,25 +15,26 @@ const deleteIcon = `<div data-testid="delete-icon" class="delete-icon">
   </svg>
 </div>`;
 
-initAddTaskBtn();
+initAddTaskEvents();
 renderTaskList();
 
-function initAddTaskBtn() {
-  document.querySelector('.plus').addEventListener('click', clickToAddTask);
-;}
+function initAddTaskEvents() {
+  initEnterKeyEvent();
+  initAddTaskBtnEvent();
+};
 
+function initAddTaskBtnEvent() {
+  document.querySelector('.plus').addEventListener('click', addTask);
+};
 
-function clickToAddTask(e) {
-  addTask();
-  addListenerToTask();
+function initEnterKeyEvent() {
+  document.querySelector('.input-task input')
+    .addEventListener('keypress', keyupToAddTask);
 }
-
-document.querySelector('.input-task input').addEventListener('keypress', keyupToAddTask);
 
 function keyupToAddTask(e) {
   if(e.keyCode === 13) {
     addTask();
-    addListenerToTask();
   }
 }
 
