@@ -14,20 +14,15 @@ const deleteIcon = `<div data-testid="delete-icon" class="delete-icon">
     </path>
   </svg>
 </div>`;
-// setTimeout(() => {
-//   console.log(123);
-//   renderTaskList(taskListAry);
-// }, 0)
 
-// DOMContentLoaded 也可以
+initAddTaskBtn();
+renderTaskList();
 
-// window.onload = () => {
-  renderTaskList(taskListAry);
-// }
-addListenerToTask();
+function initAddTaskBtn() {
+  document.querySelector('.plus').addEventListener('click', clickToAddTask);
+;}
 
 
-document.querySelector('.plus').addEventListener('click', clickToAddTask);
 function clickToAddTask(e) {
   addTask();
   addListenerToTask();
@@ -74,7 +69,7 @@ function addTask(e) {
   };
   taskListAry.push(taskObj);
   localStorage.setItem('saveTaskList', JSON.stringify(taskListAry));
-  filterTasks(currentStatus);
+  renderTaskList();
   document.querySelector('.input-task input').value = '';
 }
 
@@ -101,7 +96,7 @@ function deleteTask(e) {
     })
   }
   localStorage.setItem('saveTaskList', JSON.stringify(taskListAry));
-  filterTasks(currentStatus);
+  renderTaskList();
 }
 
 document.querySelector('.refresh').addEventListener('click', deleteAllTasks);
@@ -127,7 +122,7 @@ function deleteAllTasks(e) {
 }
 
 function completeTask(e) {
-  filterTasks(currentStatus);
+  renderTaskList();
   // console.log(e.currentTarget.parentNode);
   let undone = e.currentTarget;
   let done = e.currentTarget.parentNode.children[1];
@@ -163,7 +158,7 @@ function completeTask(e) {
 }
 
 function cancelCompletedTask(e) {
-  filterTasks(currentStatus);
+  renderTaskList();
   let done = e.currentTarget;
   let undone = e.currentTarget.parentNode.children[0];
   let taskId = e.currentTarget.parentNode.getAttribute('data-num');
@@ -194,7 +189,7 @@ function cancelCompletedTask(e) {
   done.style.display = 'none';
   currentTaskContent.classList.remove('line-through');
   localStorage.setItem('saveTaskList',JSON.stringify(taskListAry));
-  filterTasks(currentStatus);
+  renderTaskList();
 }
 
 function editTaskContent(e) { 
@@ -248,7 +243,7 @@ function changeStatus(e) {
   document.querySelectorAll('.task-status p').forEach(status => status.classList.remove('current'));
   e.target.classList.add('current');
   currentStatus = e.target.textContent;
-  filterTasks(currentStatus);
+  renderTaskList();
 }
 function getFilteredTasks(status) {
   if (status === '進行中') {
@@ -259,12 +254,6 @@ function getFilteredTasks(status) {
     ? taskListAry.filter(task => task.done === true)
     : taskListAry;
 };
-
-function filterTasks(currentStatus) {
-  const filterCondition = getFilteredTasks(currentStatus);
-  renderTaskList(filterCondition);
-  addListenerToTask();
-}
 
 function taskIconGenerator(taskObj) {
   const undoneIcon = `<div data-testid="undone" class="undone"></div>`;
@@ -296,11 +285,13 @@ function taskElementGenerator(taskObj) {
           </div>`;
 };
 
-function renderTaskList(tasksAry) {
+function renderTaskList() {
   const taskListView = document.querySelector('.task-list');
-  taskListView.innerHTML = tasksAry
+  taskListView.innerHTML = getFilteredTasks(currentStatus)
     .map((obj, index) => taskElementGenerator(obj, index))
     .join('');
+
+  addListenerToTask();
 }
 
 
