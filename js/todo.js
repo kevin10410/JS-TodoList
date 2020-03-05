@@ -80,27 +80,12 @@ function addTask(e) {
 }
 
 function deleteTask(e) {
-  // console.log('delete');
-  let taskId = e.currentTarget.parentNode.getAttribute('data-num');
   let id = e.currentTarget.parentNode.getAttribute('id');
-  if(currentStatus === '全部') {
-    taskListAry.splice(taskId, 1);
-  }
-  if(currentStatus === '進行中') {
-    // 取得原陣列與目前點擊比對相符的物件，更新原陣列的狀態。
-    taskListAry.forEach((task, index) => {
-      if(task.id === id) {
-        taskListAry.splice(index, 1);
-      }
-    })
-  }
-  if(currentStatus === '已完成') {
-    taskListAry.forEach((task, index) => {
-      if(task.id === id) {
-        taskListAry.splice(index, 1);
-      }
-    })
-  }
+  taskListAry.forEach((task, index) => {
+    if (task.id === id) {
+      taskListAry.splice(index, 1);
+    }
+  });
   localStorage.setItem('saveTaskList', JSON.stringify(taskListAry));
   renderTaskList();
 }
