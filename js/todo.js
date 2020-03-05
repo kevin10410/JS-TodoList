@@ -149,7 +149,7 @@ function completeTask(e) {
   done.style.display = 'block';
   currentTaskContent.classList.add('line-through');
   localStorage.setItem('saveTaskList',JSON.stringify(taskListAry));
-  filterTasks(currentStatus);
+  renderTaskList();
 }
 
 function cancelCompletedTask(e) {
