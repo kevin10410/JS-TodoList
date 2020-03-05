@@ -250,20 +250,19 @@ function changeStatus(e) {
   currentStatus = e.target.textContent;
   filterTasks(currentStatus);
 }
-// 勾選任務狀態後，重新渲染該狀態時的畫面
-function filterTasks(currentStatus) { 
-  // console.log(currentStatus);
-  if(currentStatus === '全部') {
-    renderTaskList(taskListAry);
+function getFilteredTasks(status) {
+  if (status === '進行中') {
+    return taskListAry
+      .filter(task => task.done === false);
   }
-  if(currentStatus === '進行中') {
-    inProgressAry = taskListAry.filter(task => task.done === false);
-    renderTaskList(inProgressAry);
-  }
-  if(currentStatus === '已完成') {
-    finishedAry = taskListAry.filter(task => task.done === true);
-    renderTaskList(finishedAry);
-  }
+  return status === '已完成'
+    ? taskListAry.filter(task => task.done === true)
+    : taskListAry;
+};
+
+function filterTasks(currentStatus) {
+  const filterCondition = getFilteredTasks(currentStatus);
+  renderTaskList(filterCondition);
   addListenerToTask();
 }
 
