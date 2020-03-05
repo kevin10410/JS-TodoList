@@ -289,25 +289,19 @@ function taskContentGenerator(taskObj) {
           </div>`;
 };
 
-// 任務列表畫面
+function taskElementGenerator(taskObj) {
+  return  `<div class="task" id="${ taskObj.id }" data-num="${ index }">
+            ${ taskIconGenerator(taskObj) }
+            ${ taskContentGenerator(taskObj) }
+            ${ deleteIcon }
+          </div>`;
+};
+
 function renderTaskList(tasksAry) {
   const taskListView = document.querySelector('.task-list');
-  taskListView.innerHTML = tasksAry.map((obj, index) => {
-
-    
-      
-      
-    let dom = `
-      <div class="task" id="${ obj.id }" data-num="${ index }">
-        ${ taskIconGenerator(obj) }
-        ${ taskContentGenerator(obj) }
-        ${ deleteIcon }
-      </div>
-    `;
-    // !index && console.log(dom);
-    return dom;
-  }).join('');
-
+  taskListView.innerHTML = tasksAry
+    .map((obj, index) => taskElementGenerator(obj, index))
+    .join('');
 }
 
 
