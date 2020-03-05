@@ -267,22 +267,24 @@ function filterTasks(currentStatus) {
   addListenerToTask();
 }
 
-
-
-// 任務列表畫面
-function renderTaskList(tasksAry) {
-  const taskListView = document.querySelector('.task-list');
-  taskListView.innerHTML = tasksAry.map((obj, index) => {
-    // 透過模板字串搭配三元運算子動態修改css display / class 的值
-
-    // 將完成狀態拆分的更細，再透過 template string 與任務狀態判斷對應的顯示
-    const undoneIcon = `<div data-testid="undone" class="undone" style="display: ${ !obj.done ? 'block' : 'none' };"></div>`
-    const doneIcon = `<div data-testid="done" class="done" style="display: ${ !obj.done ? 'none' : 'block'};">
+function taskIconGenerator(taskObj) {
+  const undoneIcon = `<div data-testid="undone" class="undone"></div>`;
+  const doneIcon = `<div data-testid="done" class="done">
     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" class="svg-inline--fa fa-check fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path fill="white" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z">
       </path>
     </svg>
   </div>`
+
+  return taskObj.done
+    ? doneIcon
+    : undoneIcon;
+};
+
+// 任務列表畫面
+function renderTaskList(tasksAry) {
+  const taskListView = document.querySelector('.task-list');
+  taskListView.innerHTML = tasksAry.map((obj, index) => {
 
     const task = `<div data-testid="task-content" class="task-content ${ obj.done ? 'line-through' : '' }">
       <p>${ obj.task }</p>
@@ -292,7 +294,7 @@ function renderTaskList(tasksAry) {
       
     let dom = `
       <div class="task" id="${ obj.id }" data-num="${ index }">
-        ${ obj.done ? doneIcon : undoneIcon }
+        ${ taskIconGenerator(obj) }
         ${ task }
         ${ deleteIcon }
       </div>
